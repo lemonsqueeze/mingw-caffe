@@ -1,0 +1,93 @@
+diff --git a/Makefile b/Makefile
+index 568d9c2..422505f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -178,7 +178,7 @@ ifneq ($(CPU_ONLY), 1)
+ 	LIBRARIES := cudart cublas curand
+ endif
+ 
+-LIBRARIES += glog gflags protobuf boost_system boost_filesystem m hdf5_hl hdf5
++LIBRARIES += glog gflags protobuf boost_system-mt boost_filesystem-mt boost_thread-mt m hdf5_hl hdf5
+ 
+ # handle IO dependencies
+ USE_LEVELDB ?= 1
+@@ -197,9 +197,8 @@ ifeq ($(USE_OPENCV), 1)
+ 	ifeq ($(OPENCV_VERSION), 3)
+ 		LIBRARIES += opencv_imgcodecs
+ 	endif
+-		
+ endif
+-PYTHON_LIBRARIES ?= boost_python python2.7
++PYTHON_LIBRARIES ?= boost_python-mt python2.7
+ WARNINGS := -Wall -Wno-sign-compare
+ 
+ ##############################
+@@ -402,11 +401,11 @@ CXXFLAGS += -MMD -MP
+ 
+ # Complete build flags.
+ COMMON_FLAGS += $(foreach includedir,$(INCLUDE_DIRS),-I$(includedir))
+-CXXFLAGS += -pthread -fPIC $(COMMON_FLAGS) $(WARNINGS)
+-NVCCFLAGS += -ccbin=$(CXX) -Xcompiler -fPIC $(COMMON_FLAGS)
++CXXFLAGS += -pthread $(COMMON_FLAGS) $(WARNINGS)
++NVCCFLAGS += -ccbin=$(CXX) -Xcompiler $(COMMON_FLAGS)
+ # mex may invoke an older gcc that is too liberal with -Wuninitalized
+ MATLAB_CXXFLAGS := $(CXXFLAGS) -Wno-uninitialized
+-LINKFLAGS += -pthread -fPIC $(COMMON_FLAGS) $(WARNINGS)
++LINKFLAGS += -pthread $(COMMON_FLAGS) $(WARNINGS)
+ 
+ USE_PKG_CONFIG ?= 0
+ ifeq ($(USE_PKG_CONFIG), 1)
+diff --git a/include/caffe/util/signal_handler.h b/include/caffe/util/signal_handler.h
+index fb84c65..ee14c47 100644
+--- a/include/caffe/util/signal_handler.h
++++ b/include/caffe/util/signal_handler.h
+@@ -1,5 +1,6 @@
+ #ifndef INCLUDE_CAFFE_UTIL_SIGNAL_HANDLER_H_
+ #define INCLUDE_CAFFE_UTIL_SIGNAL_HANDLER_H_
++#if HAVE_SIGNALS
+ 
+ #include "caffe/proto/caffe.pb.h"
+ #include "caffe/solver.hpp"
+@@ -21,4 +22,5 @@ class SignalHandler {
+ 
+ }  // namespace caffe
+ 
++#endif  // HAVE_SIGNALS
+ #endif  // INCLUDE_CAFFE_UTIL_SIGNAL_HANDLER_H_
+diff --git a/src/caffe/util/signal_handler.cpp b/src/caffe/util/signal_handler.cpp
+index 6599db4..bae706a 100644
+--- a/src/caffe/util/signal_handler.cpp
++++ b/src/caffe/util/signal_handler.cpp
+@@ -1,3 +1,4 @@
++#if HAVE_SIGNALS
+ #include <boost/bind.hpp>
+ #include <glog/logging.h>
+ 
+@@ -135,3 +136,4 @@ ActionCallback SignalHandler::GetActionFunction() {
+ }
+ 
+ }  // namespace caffe
++#endif
+diff --git a/tools/caffe.cpp b/tools/caffe.cpp
+index 3af434b..992132f 100644
+--- a/tools/caffe.cpp
++++ b/tools/caffe.cpp
+@@ -197,14 +197,18 @@ int train() {
+     Caffe::set_solver_count(gpus.size());
+   }
+ 
++#if HAVE_SIGNALS
+   caffe::SignalHandler signal_handler(
+         GetRequestedAction(FLAGS_sigint_effect),
+         GetRequestedAction(FLAGS_sighup_effect));
++#endif
+ 
+   shared_ptr<caffe::Solver<float> >
+       solver(caffe::SolverRegistry<float>::CreateSolver(solver_param));
+ 
++#if HAVE_SIGNALS
+   solver->SetActionFunction(signal_handler.GetActionFunction());
++#endif
+ 
+   if (FLAGS_snapshot.size()) {
+     LOG(INFO) << "Resuming from " << FLAGS_snapshot;
