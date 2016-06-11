@@ -45,10 +45,26 @@ prepare() {
 
 build() {
   cd "${srcdir}/caffe"
+  rm -rf ".build-${MINGW_CHOST}_release"
+
   make
+
+  cd ".build-${MINGW_CHOST}_release/lib"
+  mv libcaffe.so libcaffe.dll
+  gendef libcaffe.dll
+  dlltool -d libcaffe.def -l libcaffe.dll.a
+
+  make pycaffe
 }
 
 package() {
   cd "${srcdir}/caffe"
   install -Dm644 LICENSE "${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/LICENSE"
+
+  install -Dm644 ".build-${MINGW_CHOST}_release/lib/libcaffe.dll" \
+          "${pkgdir}${MINGW_PREFIX}/bin/libcaffe.dll"
+  install -Dm644 ".build-${MINGW_CHOST}_release/lib/libcaffe.dll.a" \
+          "${pkgdir}${MINGW_PREFIX}/lib/libcaffe.dll"
+  install -Dm644 ".build-${MINGW_CHOST}_release/lib/libcaffe.a" \
+          "${pkgdir}${MINGW_PREFIX}/lib/libcaffe.a"
 }
