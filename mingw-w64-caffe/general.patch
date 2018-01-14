@@ -1,8 +1,19 @@
 diff --git a/Makefile b/Makefile
-index 568d9c2..422505f 100644
+index 4d324160c..a3f4de3fc 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -178,7 +178,7 @@ ifneq ($(CPU_ONLY), 1)
+@@ -35,9 +35,7 @@ STATIC_NAME := $(LIB_BUILD_DIR)/lib$(LIBRARY_NAME).a
+ DYNAMIC_VERSION_MAJOR 		:= 1
+ DYNAMIC_VERSION_MINOR 		:= 0
+ DYNAMIC_VERSION_REVISION 	:= 0
+-DYNAMIC_NAME_SHORT := lib$(LIBRARY_NAME).so
+-#DYNAMIC_SONAME_SHORT := $(DYNAMIC_NAME_SHORT).$(DYNAMIC_VERSION_MAJOR)
+-DYNAMIC_VERSIONED_NAME_SHORT := $(DYNAMIC_NAME_SHORT).$(DYNAMIC_VERSION_MAJOR).$(DYNAMIC_VERSION_MINOR).$(DYNAMIC_VERSION_REVISION)
++DYNAMIC_VERSIONED_NAME_SHORT := libcaffe.dll
+ DYNAMIC_NAME := $(LIB_BUILD_DIR)/$(DYNAMIC_VERSIONED_NAME_SHORT)
+ COMMON_FLAGS += -DCAFFE_VERSION=$(DYNAMIC_VERSION_MAJOR).$(DYNAMIC_VERSION_MINOR).$(DYNAMIC_VERSION_REVISION)
+ 
+@@ -178,7 +176,7 @@ ifneq ($(CPU_ONLY), 1)
  	LIBRARIES := cudart cublas curand
  endif
  
@@ -11,18 +22,16 @@ index 568d9c2..422505f 100644
  
  # handle IO dependencies
  USE_LEVELDB ?= 1
-@@ -197,9 +197,8 @@ ifeq ($(USE_OPENCV), 1)
- 	ifeq ($(OPENCV_VERSION), 3)
- 		LIBRARIES += opencv_imgcodecs
+@@ -199,7 +197,7 @@ ifeq ($(USE_OPENCV), 1)
  	endif
--		
+ 
  endif
 -PYTHON_LIBRARIES ?= boost_python python2.7
 +PYTHON_LIBRARIES ?= boost_python-mt python2.7
  WARNINGS := -Wall -Wno-sign-compare
  
  ##############################
-@@ -402,11 +401,11 @@ CXXFLAGS += -MMD -MP
+@@ -411,11 +409,11 @@ CXXFLAGS += -MMD -MP
  
  # Complete build flags.
  COMMON_FLAGS += $(foreach includedir,$(INCLUDE_DIRS),-I$(includedir))
@@ -37,8 +46,33 @@ index 568d9c2..422505f 100644
  
  USE_PKG_CONFIG ?= 0
  ifeq ($(USE_PKG_CONFIG), 1)
+@@ -571,7 +569,6 @@ $(ALL_BUILD_DIRS): | $(BUILD_DIR_LINK)
+ $(DYNAMIC_NAME): $(OBJS) | $(LIB_BUILD_DIR)
+ 	@ echo LD -o $@
+ 	$(Q)$(CXX) -shared -o $@ $(OBJS) $(VERSIONFLAGS) $(LINKFLAGS) $(LDFLAGS)
+-	@ cd $(BUILD_DIR)/lib; rm -f $(DYNAMIC_NAME_SHORT);   ln -s $(DYNAMIC_VERSIONED_NAME_SHORT) $(DYNAMIC_NAME_SHORT)
+ 
+ $(STATIC_NAME): $(OBJS) | $(LIB_BUILD_DIR)
+ 	@ echo AR -o $@
+@@ -679,7 +676,7 @@ superclean: clean supercleanfiles
+ 
+ $(DIST_ALIASES): $(DISTRIBUTE_DIR)
+ 
+-$(DISTRIBUTE_DIR): all py | $(DISTRIBUTE_SUBDIRS)
++$(DISTRIBUTE_DIR): all | $(DISTRIBUTE_SUBDIRS)
+ 	# add proto
+ 	cp -r src/caffe/proto $(DISTRIBUTE_DIR)/
+ 	# add include
+@@ -692,7 +689,6 @@ $(DISTRIBUTE_DIR): all py | $(DISTRIBUTE_SUBDIRS)
+ 	# add libraries
+ 	cp $(STATIC_NAME) $(DISTRIBUTE_DIR)/lib
+ 	install -m 644 $(DYNAMIC_NAME) $(DISTRIBUTE_DIR)/lib
+-	cd $(DISTRIBUTE_DIR)/lib; rm -f $(DYNAMIC_NAME_SHORT);   ln -s $(DYNAMIC_VERSIONED_NAME_SHORT) $(DYNAMIC_NAME_SHORT)
+ 	# add python - it's not the standard way, indeed...
+ 	cp -r python $(DISTRIBUTE_DIR)/python
+ 
 diff --git a/include/caffe/util/signal_handler.h b/include/caffe/util/signal_handler.h
-index fb84c65..ee14c47 100644
+index fb84c65bd..ee14c4752 100644
 --- a/include/caffe/util/signal_handler.h
 +++ b/include/caffe/util/signal_handler.h
 @@ -1,5 +1,6 @@
@@ -55,7 +89,7 @@ index fb84c65..ee14c47 100644
 +#endif  // HAVE_SIGNALS
  #endif  // INCLUDE_CAFFE_UTIL_SIGNAL_HANDLER_H_
 diff --git a/src/caffe/util/signal_handler.cpp b/src/caffe/util/signal_handler.cpp
-index 6599db4..bae706a 100644
+index 6599db471..bae706a45 100644
 --- a/src/caffe/util/signal_handler.cpp
 +++ b/src/caffe/util/signal_handler.cpp
 @@ -1,3 +1,4 @@
@@ -69,10 +103,10 @@ index 6599db4..bae706a 100644
  }  // namespace caffe
 +#endif
 diff --git a/tools/caffe.cpp b/tools/caffe.cpp
-index 3af434b..992132f 100644
+index 01b3dbd61..bb38504a7 100644
 --- a/tools/caffe.cpp
 +++ b/tools/caffe.cpp
-@@ -197,14 +197,18 @@ int train() {
+@@ -230,14 +230,18 @@ int train() {
      Caffe::set_solver_count(gpus.size());
    }
  

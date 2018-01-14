@@ -1,4 +1,4 @@
-# Maintainer: David Grayson <davidegrayson@gmail.com>
+# Maintainer: lemonsqueeze <lemonsqueeze@gmx.com>
 
 _realname=caffe
 pkgbase=mingw-w64-${_realname}
@@ -6,7 +6,7 @@ pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-git"
 provides=("${MINGW_PACKAGE_PREFIX}-${_realname}")
 conflicts=("${MINGW_PACKAGE_PREFIX}-${_realname}")
 replaces=("${MINGW_PACKAGE_PREFIX}-${_realname}")
-pkgver=3688.d0bd302
+pkgver=4131.509dae053
 pkgrel=1
 pkgdesc='Deep learning framework (mingw-w64)'
 arch=('any')
@@ -20,16 +20,13 @@ depends=(
   "${MINGW_PACKAGE_PREFIX}-gflags"
   "${MINGW_PACKAGE_PREFIX}-glog"
   "${MINGW_PACKAGE_PREFIX}-hdf5"
-  "${MINGW_PACKAGE_PREFIX}-openblas"
-  "${MINGW_PACKAGE_PREFIX}-opencv"
-  "${MINGW_PACKAGE_PREFIX}-python2"
-  "${MINGW_PACKAGE_PREFIX}-python2-numpy")
+  "${MINGW_PACKAGE_PREFIX}-openblas")
 source=("git+https://github.com/BVLC/caffe"
         "Makefile.config"
         "general.patch")
 sha256sums=('SKIP'
-            'aaed466d5081d45b65325a98640fc41f99f158ce58c554cd379f803a09214fcb'
-            '1ba19311806f6a460e36ac35301dc9cd1625cacada665b50bccb5f0e0ed2ff73')
+            'SKIP'
+            'SKIP')
 
 pkgver() {
   cd "${srcdir}/caffe"
@@ -47,24 +44,24 @@ build() {
   cd "${srcdir}/caffe"
   rm -rf ".build-${MINGW_CHOST}_release"
 
-  make
+  make all distribute
 
-  cd ".build-${MINGW_CHOST}_release/lib"
-  mv libcaffe.so libcaffe.dll
+  cd "distribute-${MINGW_CHOST}/lib"
   gendef libcaffe.dll
   dlltool -d libcaffe.def -l libcaffe.dll.a
-
-  make pycaffe
 }
 
 package() {
   cd "${srcdir}/caffe"
   install -Dm644 LICENSE "${pkgdir}${MINGW_PREFIX}/share/licenses/${_realname}/LICENSE"
 
-  install -Dm644 ".build-${MINGW_CHOST}_release/lib/libcaffe.dll" \
-          "${pkgdir}${MINGW_PREFIX}/bin/libcaffe.dll"
-  install -Dm644 ".build-${MINGW_CHOST}_release/lib/libcaffe.dll.a" \
-          "${pkgdir}${MINGW_PREFIX}/lib/libcaffe.dll"
-  install -Dm644 ".build-${MINGW_CHOST}_release/lib/libcaffe.a" \
-          "${pkgdir}${MINGW_PREFIX}/lib/libcaffe.a"
+  install -d "${pkgdir}${MINGW_PREFIX}/include"
+  install -d "${pkgdir}${MINGW_PREFIX}/lib"
+  install -d "${pkgdir}${MINGW_PREFIX}/bin"
+
+  install -Dm644 "distribute-${MINGW_CHOST}/lib/libcaffe.dll"    "${pkgdir}${MINGW_PREFIX}/bin/"
+  install -Dm644 "distribute-${MINGW_CHOST}/lib/libcaffe.dll.a"  "${pkgdir}${MINGW_PREFIX}/lib/"
+  install -Dm644 "distribute-${MINGW_CHOST}/lib/libcaffe.a"      "${pkgdir}${MINGW_PREFIX}/lib/"
+
+  cp -r "distribute-${MINGW_CHOST}/include/caffe"  "${pkgdir}${MINGW_PREFIX}/include/"
 }
