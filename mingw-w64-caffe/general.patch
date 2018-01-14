@@ -88,6 +88,19 @@ index fb84c65bd..ee14c4752 100644
  
 +#endif  // HAVE_SIGNALS
  #endif  // INCLUDE_CAFFE_UTIL_SIGNAL_HANDLER_H_
+diff --git a/src/caffe/util/io.cpp b/src/caffe/util/io.cpp
+index f679df815..1cbb00c8e 100644
+--- a/src/caffe/util/io.cpp
++++ b/src/caffe/util/io.cpp
+@@ -55,7 +55,7 @@ void WriteProtoToTextFile(const Message& proto, const char* filename) {
+ }
+ 
+ bool ReadProtoFromBinaryFile(const char* filename, Message* proto) {
+-#if defined (_MSC_VER)  // for MSC compiler binary flag needs to be specified
++#if defined (_WIN32)  // for windows binary flag needs to be specified
+   int fd = open(filename, O_RDONLY | O_BINARY);
+ #else
+   int fd = open(filename, O_RDONLY);
 diff --git a/src/caffe/util/signal_handler.cpp b/src/caffe/util/signal_handler.cpp
 index 6599db471..bae706a45 100644
 --- a/src/caffe/util/signal_handler.cpp
