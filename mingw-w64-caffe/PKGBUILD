@@ -6,7 +6,7 @@ pkgname="${MINGW_PACKAGE_PREFIX}-${_realname}-git"
 provides=("${MINGW_PACKAGE_PREFIX}-${_realname}")
 conflicts=("${MINGW_PACKAGE_PREFIX}-${_realname}")
 replaces=("${MINGW_PACKAGE_PREFIX}-${_realname}")
-pkgver=4131.509dae053
+pkgver=4078.7e970675c
 pkgrel=1
 pkgdesc='Deep learning framework (mingw-w64)'
 arch=('any')
@@ -36,7 +36,7 @@ pkgver() {
 
 prepare() {
   cd "${srcdir}/caffe"
-  git checkout windows
+  git checkout master
   cp "../Makefile.config" .
   patch -p1 -i ../general.patch
 }

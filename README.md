@@ -1,6 +1,6 @@
 
 These files can be used to build a minimal cpu-only [caffe](https://github.com/BVLC/caffe) package for msys2 / mingw-w64.  
-Build pulls latest caffe sources from git (windows branch).
+Build pulls latest caffe sources from git (master branch).
 
 To build, run an MSYS2 shell and install dependencies: (replace `mingw32` with `mingw64` for 64-bit build)
 
