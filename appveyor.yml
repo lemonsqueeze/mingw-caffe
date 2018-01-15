@@ -2,11 +2,10 @@ version: 1.0.{build}
 clone_folder: c:\projects\mingw-caffe
 environment:
   matrix:
-  - ARCH: "i686"
-    MINGW_INSTALLS: mingw32
-#  TODO
-#  - ARCH: "x86_64"
-
+   - ARCH: "i686"
+     MINGW_INSTALLS: mingw32
+   - ARCH: "x86_64"
+     MINGW_INSTALLS: mingw64
 
 build_script:
 # Remove unwanted stuff from path

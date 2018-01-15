@@ -1,0 +1,20 @@
+--- /mingw64/include/boost/winapi/basic_types.hpp.orig	2018-01-15 09:08:54.825465300 +0100
++++ /mingw64/include/boost/winapi/basic_types.hpp	2018-01-15 09:12:11.351139200 +0100
+@@ -46,13 +46,13 @@
+ # error "Win32 functions not available"
+ #endif
+ 
+-#ifndef NO_STRICT
+-#ifndef STRICT
+-#define STRICT 1
++#ifndef BOOST_WINAPI_NO_STRICT
++#ifndef BOOST_WINAPI_STRICT
++#define BOOST_WINAPI_STRICT 1
+ #endif
+ #endif
+ 
+-#if defined(STRICT)
++#if defined(BOOST_WINAPI_STRICT)
+ #define BOOST_WINAPI_DETAIL_DECLARE_HANDLE(x) struct x##__; typedef struct x##__ *x
+ #else
+ #define BOOST_WINAPI_DETAIL_DECLARE_HANDLE(x) typedef void* x

@@ -6,6 +6,10 @@ die() { echo "$@"; exit 1; }
 # Run in top-level directory
 cd `dirname "$0"`/..
 
+# Show arch
+echo "MINGW_INSTALLS: $MINGW_INSTALLS"
+echo ""
+
 # Update pacman db and packages
 pacman --noconfirm -Syu
 pacman --noconfirm -Su
@@ -21,8 +25,17 @@ if [ "$MINGW_INSTALLS" = "mingw32" ]; then
 	mingw32/mingw-w64-i686-hdf5 \
 	mingw32/mingw-w64-i686-openblas \
 	git make patch diffutils
-else
-    die "fixme"
+fi
+
+if [ "$MINGW_INSTALLS" = "mingw64" ]; then
+    pacman -S --noconfirm \
+	mingw64/mingw-w64-x86_64-boost \
+	mingw64/mingw-w64-x86_64-protobuf-c \
+	mingw64/mingw-w64-x86_64-gflags \
+	mingw64/mingw-w64-x86_64-glog \
+	mingw64/mingw-w64-x86_64-hdf5 \
+	mingw64/mingw-w64-x86_64-openblas \
+	git make patch diffutils
 fi
 echo ""
 
@@ -36,6 +49,13 @@ if [ -f /mingw32/include/boost/winapi/basic_types.hpp ]; then
     patch -d/ -p0 < boost_header_fix_mingw32.patch
     echo ""
 fi
+
+if [ -f /mingw64/include/boost/winapi/basic_types.hpp ]; then
+    echo "Patching boost headers..."
+    patch -d/ -p0 < boost_header_fix_mingw64.patch
+    echo ""
+fi
+
 
 
 # Build

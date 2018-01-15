@@ -1,5 +1,6 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/uj5aafc9cmrt9dh2?svg=true)](https://ci.appveyor.com/project/lemonsqueeze/mingw-caffe)
 
+Binary packages: [Releases](https://github.com/lemonsqueeze/mingw-caffe/releases)
 
 These files can be used to build a minimal cpu-only [caffe](https://github.com/BVLC/caffe) package for msys2 / mingw-w64.  
 Build pulls latest caffe sources from git (master branch).
@@ -32,6 +33,7 @@ To install the built package on your system:
   Try this:
 
       patch boost_header_fix_mingw32.patch
+      patch boost_header_fix_mingw64.patch
 
 - When linking statically, caffe fails with 'Unknown layer type: Input'  
   Currently you need to use something like this for static link to work:
@@ -46,3 +48,5 @@ Based on DavidEGrayson's [mingw-packages-deg](https://github.com/DavidEGrayson/m
 Fixed dll and 'Failed to parse NetParameter file' issues.
 
 No extensive testing, loading and forwarding trained networks works though.
+
+TODO: build python layer
