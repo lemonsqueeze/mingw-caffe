@@ -32,8 +32,8 @@ To install the built package on your system:
   A header in current boost package is messed up, #defines STRICT when it really shouldn't.
   Try this:
 
-      patch boost_header_fix_mingw32.patch
-      patch boost_header_fix_mingw64.patch
+      patch -d/ -p0 < boost_header_fix_mingw32.patch
+      patch -d/ -p0 < boost_header_fix_mingw64.patch
 
 - When linking statically, caffe fails with 'Unknown layer type: Input'  
   Currently you need to use something like this for static link to work:
