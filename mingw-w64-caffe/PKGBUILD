@@ -17,6 +17,7 @@ makedepends=(
 )
 depends=(
   "${MINGW_PACKAGE_PREFIX}-boost"
+  "${MINGW_PACKAGE_PREFIX}-protobuf-c"
   "${MINGW_PACKAGE_PREFIX}-gflags"
   "${MINGW_PACKAGE_PREFIX}-glog"
   "${MINGW_PACKAGE_PREFIX}-hdf5"
