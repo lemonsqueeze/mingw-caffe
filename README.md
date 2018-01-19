@@ -5,8 +5,12 @@ Binary packages: [Releases](https://github.com/lemonsqueeze/mingw-caffe/releases
 These files can be used to build a minimal cpu-only [caffe](https://github.com/BVLC/caffe) package for msys2 / mingw-w64.  
 Build pulls latest caffe sources from git (master branch).
 
-To build, run an MSYS2 shell, install dependencies: (replace `mingw32` with `mingw64` for 64-bit build)
+To build, run an MSYS2 shell, install dependencies:
 
+    pacman -S git make patch diffutils
+    
+    # 32-bit build:
+    pacman -S mingw32/mingw-w64-i686-tools-git          # gendef, dlltool
     pacman -S mingw32/mingw-w64-i686-gcc
     pacman -S mingw32/mingw-w64-i686-boost
     pacman -S mingw32/mingw-w64-i686-protobuf-c
@@ -14,7 +18,17 @@ To build, run an MSYS2 shell, install dependencies: (replace `mingw32` with `min
     pacman -S mingw32/mingw-w64-i686-glog
     pacman -S mingw32/mingw-w64-i686-hdf5
     pacman -S mingw32/mingw-w64-i686-openblas
-    pacman -S git make patch diffutils
+    
+    # 64-bit build:
+    pacman -S mingw64/mingw-w64-x86_64-tools-git        # gendef, dlltool
+    pacman -S mingw64/mingw-w64-x86_64-gcc
+    pacman -S mingw64/mingw-w64-x86_64-boost
+    pacman -S mingw64/mingw-w64-x86_64-protobuf-c
+    pacman -S mingw64/mingw-w64-x86_64-gflags
+    pacman -S mingw64/mingw-w64-x86_64-glog
+    pacman -S mingw64/mingw-w64-x86_64-hdf5
+    pacman -S mingw64/mingw-w64-x86_64-openblas
+
 
 Navigate to mingw-w64-caffe directory and run `makepkg-mingw`.
 

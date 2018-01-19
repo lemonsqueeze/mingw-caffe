@@ -13,6 +13,7 @@ arch=('any')
 url=''
 license=('custom')
 makedepends=(
+  "${MINGW_PACKAGE_PREFIX}-tools-git"
   "${MINGW_PACKAGE_PREFIX}-gcc"
 )
 depends=(
