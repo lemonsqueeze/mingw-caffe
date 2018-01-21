@@ -1,9 +1,14 @@
+
+[ nohdf5 branch ] caffe without hdf5 dependency / support.
+
+-------------------------------------------------------------------------------------------
+
 [![Build status](https://ci.appveyor.com/api/projects/status/uj5aafc9cmrt9dh2?svg=true)](https://ci.appveyor.com/project/lemonsqueeze/mingw-caffe)
 
 Binary packages: [Releases](https://github.com/lemonsqueeze/mingw-caffe/releases)
 
 These files can be used to build a minimal cpu-only [caffe](https://github.com/BVLC/caffe) package for msys2 / mingw-w64.  
-Build pulls latest caffe sources from git (master branch).
+Build pulls nohdf5 branch from [lemonsqueeze/caffe](https://github.com/lemonsqueeze/caffe/tree/nohdf5).
 
 To build, run an MSYS2 shell, install dependencies:
 
@@ -16,7 +21,6 @@ To build, run an MSYS2 shell, install dependencies:
     pacman -S mingw32/mingw-w64-i686-protobuf-c
     pacman -S mingw32/mingw-w64-i686-gflags
     pacman -S mingw32/mingw-w64-i686-glog
-    pacman -S mingw32/mingw-w64-i686-hdf5
     pacman -S mingw32/mingw-w64-i686-openblas
     
     # 64-bit build:
@@ -26,7 +30,6 @@ To build, run an MSYS2 shell, install dependencies:
     pacman -S mingw64/mingw-w64-x86_64-protobuf-c
     pacman -S mingw64/mingw-w64-x86_64-gflags
     pacman -S mingw64/mingw-w64-x86_64-glog
-    pacman -S mingw64/mingw-w64-x86_64-hdf5
     pacman -S mingw64/mingw-w64-x86_64-openblas
 
 
