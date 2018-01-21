@@ -21,9 +21,8 @@ depends=(
   "${MINGW_PACKAGE_PREFIX}-protobuf-c"
   "${MINGW_PACKAGE_PREFIX}-gflags"
   "${MINGW_PACKAGE_PREFIX}-glog"
-  "${MINGW_PACKAGE_PREFIX}-hdf5"
   "${MINGW_PACKAGE_PREFIX}-openblas")
-source=("git+https://github.com/BVLC/caffe"
+source=("git+https://github.com/lemonsqueeze/caffe"
         "Makefile.config"
         "general.patch")
 sha256sums=('SKIP'
@@ -32,12 +31,14 @@ sha256sums=('SKIP'
 
 pkgver() {
   cd "${srcdir}/caffe"
-  printf "%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  # Use master branch commit on which we're based,
+  # not HEAD = current (nohdf5) commit which is not terribly meaningful.
+  printf "%s.%s.nohdf5" "$(git rev-list --count master)" "$(git rev-parse --short master)"
 }
 
 prepare() {
   cd "${srcdir}/caffe"
-  git checkout master
+  git checkout nohdf5
   cp "../Makefile.config" .
   patch -p1 -i ../general.patch
 }

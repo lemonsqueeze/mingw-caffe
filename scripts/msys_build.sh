@@ -22,7 +22,6 @@ if [ "$MINGW_INSTALLS" = "mingw32" ]; then
 	mingw32/mingw-w64-i686-protobuf-c \
 	mingw32/mingw-w64-i686-gflags \
 	mingw32/mingw-w64-i686-glog \
-	mingw32/mingw-w64-i686-hdf5 \
 	mingw32/mingw-w64-i686-openblas \
 	git make patch diffutils
 fi
@@ -33,7 +32,6 @@ if [ "$MINGW_INSTALLS" = "mingw64" ]; then
 	mingw64/mingw-w64-x86_64-protobuf-c \
 	mingw64/mingw-w64-x86_64-gflags \
 	mingw64/mingw-w64-x86_64-glog \
-	mingw64/mingw-w64-x86_64-hdf5 \
 	mingw64/mingw-w64-x86_64-openblas \
 	git make patch diffutils
 fi
