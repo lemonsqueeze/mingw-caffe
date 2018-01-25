@@ -42,6 +42,9 @@ To install the built package on your system:
 
 #### Issues
 
+- Linking with caffe binary package fails.  
+  Most likely boost / glog / gflags packages have been updated and caffe needs to be rebuilt.
+
 - Caffe fails to compile: error near STRICT in src/caffe/proto/caffe.pb.h  
   A header in current boost package is messed up, #defines STRICT when it really shouldn't.
   Try this:
@@ -50,10 +53,14 @@ To install the built package on your system:
       patch -d/ -p0 < boost_header_fix_mingw64.patch
 
 - When linking statically, caffe fails with 'Unknown layer type: Input'  
-  Currently you need to use something like this for static link to work:
+  Currently you need this for static link to work:
 
       -Wl,--whole-archive -l:libcaffe.a -Wl,--no-whole-archive
 
+  or modify caffe to only pull in the layers you need (see 'mini' branch for example).
+
+- Can't link statically, libglog.a and libprotobuf.a are missing.   
+  Need [glog / protobuf packages](https://github.com/lemonsqueeze/mingw_pkgs/releases) with static libraries.
 
 ------------------------------------------------------------------------------------------------
 
