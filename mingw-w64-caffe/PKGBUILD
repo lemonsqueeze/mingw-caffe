@@ -32,13 +32,13 @@ sha256sums=('SKIP'
 pkgver() {
   cd "${srcdir}/caffe"
   # Use master branch commit on which we're based,
-  # not HEAD = current (nohdf5) commit which is not terribly meaningful.
-  printf "%s.%s.nohdf5" "$(git rev-list --count master)" "$(git rev-parse --short master)"
+  # not HEAD = current (mini branch) commit which is not terribly meaningful.
+  printf "%s.%s.nohdf5.mini" "$(git rev-list --count master)" "$(git rev-parse --short master)"
 }
 
 prepare() {
   cd "${srcdir}/caffe"
-  git checkout nohdf5
+  git checkout mini
   cp "../Makefile.config" .
   patch -p1 -i ../general.patch
 }
@@ -48,10 +48,6 @@ build() {
   rm -rf ".build-${MINGW_CHOST}_release"
 
   make all distribute
-
-  cd "distribute-${MINGW_CHOST}/lib"
-  gendef libcaffe.dll
-  dlltool -d libcaffe.def -l libcaffe.dll.a
 }
 
 package() {
@@ -62,8 +58,6 @@ package() {
   install -d "${pkgdir}${MINGW_PREFIX}/lib"
   install -d "${pkgdir}${MINGW_PREFIX}/bin"
 
-  install -Dm644 "distribute-${MINGW_CHOST}/lib/libcaffe.dll"    "${pkgdir}${MINGW_PREFIX}/bin/"
-  install -Dm644 "distribute-${MINGW_CHOST}/lib/libcaffe.dll.a"  "${pkgdir}${MINGW_PREFIX}/lib/"
   install -Dm644 "distribute-${MINGW_CHOST}/lib/libcaffe.a"      "${pkgdir}${MINGW_PREFIX}/lib/"
 
   cp -r "distribute-${MINGW_CHOST}/include/caffe"  "${pkgdir}${MINGW_PREFIX}/include/"

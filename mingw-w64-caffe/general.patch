@@ -60,7 +60,7 @@ index 2e101f4..e98b2fd 100644
  
  $(STATIC_NAME): $(OBJS) | $(LIB_BUILD_DIR)
  	@ echo AR -o $@
-@@ -679,7 +682,7 @@ superclean: clean supercleanfiles
+@@ -679,8 +682,8 @@ superclean: clean supercleanfiles
  
  $(DIST_ALIASES): $(DISTRIBUTE_DIR)
  
@@ -69,13 +69,6 @@ index 2e101f4..e98b2fd 100644
  	# add proto
  	cp -r src/caffe/proto $(DISTRIBUTE_DIR)/
  	# add include
-@@ -692,7 +695,6 @@ $(DISTRIBUTE_DIR): all py | $(DISTRIBUTE_SUBDIRS)
- 	# add libraries
- 	cp $(STATIC_NAME) $(DISTRIBUTE_DIR)/lib
- 	install -m 644 $(DYNAMIC_NAME) $(DISTRIBUTE_DIR)/lib
--	cd $(DISTRIBUTE_DIR)/lib; rm -f $(DYNAMIC_NAME_SHORT);   ln -s $(DYNAMIC_VERSIONED_NAME_SHORT) $(DYNAMIC_NAME_SHORT)
- 	# add python - it's not the standard way, indeed...
- 	cp -r python $(DISTRIBUTE_DIR)/
  
 diff --git a/include/caffe/util/signal_handler.h b/include/caffe/util/signal_handler.h
 index fb84c65..ee14c47 100644
