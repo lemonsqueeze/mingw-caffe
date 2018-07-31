@@ -128,7 +128,7 @@ diff --git a/tools/caffe.cpp b/tools/caffe.cpp
 index 3587d8aa1..49bc7b512 100644
 --- a/tools/caffe.cpp
 +++ b/tools/caffe.cpp
-@@ -229,14 +229,18 @@ int train() {
+@@ -215,10 +215,12 @@ int train() {
      Caffe::set_solver_count(gpus.size());
    }
  
@@ -136,14 +136,22 @@ index 3587d8aa1..49bc7b512 100644
    caffe::SignalHandler signal_handler(
          GetRequestedAction(FLAGS_sigint_effect),
          GetRequestedAction(FLAGS_sighup_effect));
+-
 +#endif
- 
++		
+   if (FLAGS_snapshot.size()) {
+     solver_param.clear_weights();
+   } else if (FLAGS_weights.size()) {
+@@ -229,8 +231,10 @@ int train() {
    shared_ptr<caffe::Solver<float> >
        solver(caffe::SolverRegistry<float>::CreateSolver(solver_param));
  
 +#if HAVE_SIGNALS
    solver->SetActionFunction(signal_handler.GetActionFunction());
+-
 +#endif
- 
++  
    if (FLAGS_snapshot.size()) {
      LOG(INFO) << "Resuming from " << FLAGS_snapshot;
+     solver->Restore(FLAGS_snapshot.c_str());
+
