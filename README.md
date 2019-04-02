@@ -3,8 +3,11 @@
 
 Only these layers are supported / pulled in:
 
-    input, conv, relu, flatten, softmax
-  
+    input, conv, relu, flatten, softmax, reshape, innerproduct
+
+If you need other layers clone [mini branch](https://github.com/lemonsqueeze/caffe/tree/mini),
+add needed layers (see prev commits) and point PKGBUILD to it.
+
 If you call anything other than Net->Forward() it probably won't link.
 
 
@@ -15,7 +18,7 @@ If you call anything other than Net->Forward() it probably won't link.
 Binary packages: [Releases](https://github.com/lemonsqueeze/mingw-caffe/releases)
 
 These files can be used to build a minimal cpu-only [caffe](https://github.com/BVLC/caffe) package for msys2 / mingw-w64.  
-Build pulls mini branch from [lemonsqueeze/caffe](https://github.com/lemonsqueeze/caffe/tree/nohdf5).
+Build pulls mini branch from [lemonsqueeze/caffe](https://github.com/lemonsqueeze/caffe/tree/mini).
 
 To build, run an MSYS2 shell, install dependencies:
 
